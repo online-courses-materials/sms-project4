@@ -1,14 +1,63 @@
 # sms-course-projects
 
+- Creating the projects 
+```bash
+ros@ubuntu:~/catkin_ws$ mkdir project4_ws
+ros@ubuntu:~/catkin_ws$ cd project4_ws/
+ros@ubuntu:~/catkin_ws/project4_ws$ mkdir src
+ros@ubuntu:~/catkin_ws/project4_ws$ cd src
+ros@ubuntu:~/catkin_ws/project4_ws/src$ catkin_create_pkg project4 roscpp
+Created file project4/package.xml
+Created file project4/CMakeLists.txt
+Created folder project4/include/project4
+Created folder project4/src
+Successfully created files in /home/ros/catkin_ws/project4_ws/src/project4. Please adjust the values in package.xml.
+ros@ubuntu:~/catkin_ws/project4_ws/src$mkdir launch
+---------------------------------------------------------------
+UPDATE src FOLDER CPP CODES (launch files in launch folder & speed_calc.cpp & rpm_pub.cpp) AND C_MAKE FILE (add target information for building speed_calc & rpm_pub objects )
+---------------------------------------------------------------
+ros@ubuntu:~/catkin_ws/project4_ws/src$ cd ..
+ros@ubuntu:~/catkin_ws/project4_ws$ catkin_make
+Base path: /home/ros/catkin_ws/project4_ws
+Source space: /home/ros/catkin_ws/project4_ws/src
+Build space: /home/ros/catkin_ws/project4_ws/build
+Devel space: /home/ros/catkin_ws/project4_ws/devel
+.
+.
+.
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 1 packages in topological order:
+-- ~~  - project4
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'project4'
+-- ==> add_subdirectory(project4)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ros/catkin_ws/project4_ws/build
+####
+#### Running command: "make -j4 -l4" in "/home/ros/catkin_ws/project4_ws/build"
+####
+Scanning dependencies of target rpm_pub
+Scanning dependencies of target speed_calc
+[ 25%] Building CXX object project4/CMakeFiles/speed_calc.dir/src/speed_calc.cpp.o
+[ 50%] Building CXX object project4/CMakeFiles/rpm_pub.dir/src/rpm_pub.cpp.o
+[ 75%] Linking CXX executable /home/ros/catkin_ws/project4_ws/devel/lib/project4/rpm_pub
+[100%] Linking CXX executable /home/ros/catkin_ws/project4_ws/devel/lib/project4/speed_calc
+[100%] Built target rpm_pub
+[100%] Built target speed_calc
+ros@ubuntu:~/catkin_ws/project4_ws$
 
+```
 - Clone the repository 
 ```bash
-ros@ubuntu:~/catkin_ws/project1_ws$ git clone "https://github.com/online-courses-materials/sms-course-projects.git"
+ros@ubuntu:~/catkin_ws$ mkdir project4_ws
+ros@ubuntu:~/catkin_ws/cd project4_ws
+ros@ubuntu:~/catkin_ws/project4_ws$ git clone "https://github.com/online-courses-materials/sms-project4.git"
 ```
 
-- Run the rosecore in the command line
+- Restart the roscore in the command line
 ```bash
-ros@ubuntu:~/catkin_ws/project1_ws$ roscore
+ros@ubuntu:~/catkin_ws/project4_ws$ roscore
 .. logging to /home/ros/.ros/log/2eef3038-b49f-11ec-8a39-8b31e70de496/roslaunch-ubuntu-2895.log
 Checking log directory for disk usage. This may take a while.
 Press Ctrl-C to interrupt
@@ -37,20 +86,76 @@ started core service [/rosout]
 ```
 - Compile the project
 ```bash
-ros@ubuntu:~/catkin_ws/project1_ws$ catkin_make
+ros@ubuntu:~/catkin_ws/project4_ws$ catkin_make
 ```
 - Run the subscriber node in the new tab
 ```bash
-ros@ubuntu:~/catkin_ws/project1_ws$ source devel/setup.bash
-ros@ubuntu:~/catkin_ws/project1_ws$ rosrun project1 subscriber 
-[ INFO] [1649136189.572747064]: Hello World 2
-[ INFO] [1649136189.772282120]: Hello World 3
-[ INFO] [1649136189.972430143]: Hello World 4
-[ INFO] [1649136190.172334747]: Hello World 5
+ros@ubuntu:~/catkin_ws/project4_ws$ source devel/setup.bash
+ros@ubuntu:~/catkin_ws/project4_ws$ source devel/setup.bash
+ros@ubuntu:~/catkin_ws/project4_ws$ roslaunch project4 speed_simulator.launch
+... logging to /home/ros/.ros/log/469fe1f4-b667-11ec-b18a-37440ee3e9cd/roslaunch-ubuntu-14430.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+started roslaunch server http://ubuntu:42225/
+
+SUMMARY
+========
+
+PARAMETERS
+ * /rosdistro: noetic
+ * /rosversion: 1.15.13
+ * /wheel_radius: 0.125
+
+NODES
+  /
+    rpm_publisher_node1 (project4/rpm_pub)
+    speed_calculator_node1 (project4/speed_calc)
+
+ROS_MASTER_URI=http://localhost:11311
+
+process[rpm_publisher_node1-1]: started with pid [14444]
+process[speed_calculator_node1-2]: started with pid [14445]
+
 ```
-- Run the publisher node in the new tab
+- Test changing wheel_radius parameter   in the new tab
 ```bash
-ros@ubuntu:~/catkin_ws/project1_ws$ source devel/setup.bash
-ros@ubuntu:~/catkin_ws/project1_ws$ rosrun project1 publisher
-[ INFO] [1649136189.171565980]: Publisher Node Started
+ros@ubuntu:~/catkin_ws/project4_ws$ rosparam list
+/rosdistro
+/roslaunch/uris/host_ubuntu__39201
+/rosversion
+/run_id
+/wheel_radius
+ros@ubuntu:~/catkin_ws/project4_ws$
+
+os@ubuntu:~/catkin_ws/project4_ws$ rostopic list
+/rosout
+/rosout_agg
+/rpm
+/speed
+ros@ubuntu:~/catkin_ws/project4_ws$ rostopic echo rpm
+data: 60.0
+---
+data: 60.0
+---
+data: 60.0
+ros@ubuntu:~/catkin_ws/project4_ws$ rostopic list
+/rosout
+/rosout_agg
+/rpm
+/speed
+ros@ubuntu:~/catkin_ws/project4_ws$ rostopic echo speed
+data: 5.403534889221191
+---
+data: 5.403534889221191
+---
+data: 5.403534889221191
+---
+data: 5.403534889221191  ( Value of speed changed after setting a new value for wheel_radius parameter)
+---
+data: 0.7853975296020508
+---
+data: 0.7853975296020508
+
 ```
